@@ -4,24 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonClusterButtons"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:width="60dp"
-        android:height="60dp"
-        android:background="@drawable/ic_launcher_foreground"
+        android:background="@drawable/background_button_cluster_open"
+        android:elevation="8dp"
         android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/expandableListViewButtonsLinearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/buttonClusterButtons"
         app:layout_constraintStart_toStartOf="@+id/buttonClusterButtons"
         app:layout_constraintTop_toBottomOf="@+id/buttonClusterButtons">

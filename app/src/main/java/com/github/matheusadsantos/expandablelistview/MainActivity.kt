@@ -6,21 +6,19 @@ import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.Button
 import android.widget.ExpandableListView
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.matheusadsantos.expandablelistview.databinding.MainActivityBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private var clicked: Boolean = false
     private val binding by lazy { MainActivityBinding.inflate(layoutInflater) }
     private lateinit var expandableListViewButtons: ExpandableListView
-    private lateinit var buttonClusterButtons: Button
+    private lateinit var buttonClusterButtons: ImageButton
     private val imageClusterButtons = listOf(
         R.drawable.ic_launcher_background,
         com.google.android.material.R.drawable.ic_m3_chip_check,
@@ -32,24 +30,32 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        clicked = false
-        setupExpandableListButtons()
         setupButtonCluster()
+        setupExpandableListButtons()
+        setupInicial()
+    }
+
+    private fun setupInicial() {
+        clicked = false
+        expandableListViewButtons.visibility = View.GONE
     }
 
     private fun setupButtonCluster() {
         buttonClusterButtons = binding.buttonClusterButtons
         buttonClusterButtons.setOnClickListener {
             clicked = !clicked
-            Toast.makeText(this, "Clicked: $clicked(${expandableListViewButtons.visibility})", Toast.LENGTH_SHORT).show()
-            CoroutineScope(Dispatchers.Main).launch {
+            runOnUiThread {
                 if (clicked) {
+                    Toast.makeText(this@MainActivity, "Clicked: ${this.clicked}", Toast.LENGTH_SHORT).show()
                     expandableListViewButtons.visibility = View.VISIBLE
+//                    expandableListViewButtons.transcriptMode = ExpandableListView.CHOICE_MODE_MULTIPLE_MODAL
+                    buttonClusterButtons.setBackgroundResource(R.drawable.background_button_cluster_close)
                 } else {
-                    expandableListViewButtons.visibility = View.INVISIBLE
+                    expandableListViewButtons.visibility = View.GONE
+                    buttonClusterButtons.setBackgroundResource(R.drawable.background_button_cluster_open)
                 }
             }
-//            expandableListViewButtons.expandGroup(1, true)
+//            expandableListViewButtons.expandGroup(1, true) // already make the button expandable, in position 1
         }
     }
 
@@ -97,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         ): View {
             val imageView = ImageView(this@MainActivity)
             imageView.setImageResource(imageClusterButtons[groupPosition])
-            imageView.layoutParams = LinearLayout.LayoutParams(200, 200)
+//            imageView.layoutParams = LinearLayout.LayoutParams(60, 60)
             return imageView
         }
 
@@ -109,7 +115,7 @@ class MainActivity : AppCompatActivity() {
             parent: ViewGroup?
         ): View {
             val buttonLayout = LinearLayout(this@MainActivity)
-            buttonLayout.orientation = LinearLayout.HORIZONTAL
+            buttonLayout.orientation = LinearLayout.VERTICAL
 
             for (i in 1..5) {
                 val button = Button(this@MainActivity)
