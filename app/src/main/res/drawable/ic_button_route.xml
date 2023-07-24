@@ -7,14 +7,22 @@
       android:pathData="M16,5L44,5A6,6 0,0 1,50 11L50,39A6,6 0,0 1,44 45L16,45A6,6 0,0 1,10 39L10,11A6,6 0,0 1,16 5z"
       android:fillColor="#ffffff"/>
   <path
-      android:pathData="M24,19L36,31"
+      android:pathData="M34,26H36C37.105,26 38,26.895 38,28V28C38,29.105 37.105,30 36,30H24C22.895,30 22,30.895 22,32V32C22,33.105 22.895,34 24,34H28"
       android:strokeLineJoin="round"
       android:strokeWidth="1.5"
       android:fillColor="#00000000"
       android:strokeColor="#26333B"
       android:strokeLineCap="round"/>
   <path
-      android:pathData="M36,19L24,31"
+      android:pathData="M29,26C29,26 33,22.806 33,19.889C33,17.741 31.209,16 29,16C26.791,16 25,17.741 25,19.889C25,22.806 29,26 29,26Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="#00000000"
+      android:fillType="evenOdd"
+      android:strokeColor="#26333B"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M29.001,19.722C29.16,19.722 29.287,19.847 29.287,20C29.287,20.153 29.159,20.277 29,20.277C28.843,20.277 28.715,20.153 28.715,19.999C28.715,19.847 28.843,19.722 29.001,19.722"
       android:strokeLineJoin="round"
       android:strokeWidth="1.5"
       android:fillColor="#00000000"
