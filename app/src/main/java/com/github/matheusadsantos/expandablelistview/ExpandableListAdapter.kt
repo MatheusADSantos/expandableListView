@@ -7,14 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ImageView
-import android.widget.LinearLayout
 
 class ExpandableListAdapter(private val context: Context, private val groupIconKey: Int) :
     BaseExpandableListAdapter() {
 
-    private val groupData = listOf("Pai")
+    companion object {
+        const val ICON_KEY_PARENT_SETTING = 0 // settings (parent)
+        const val ICON_KEY_PARENT_CLOSE = 1 // close (parent)
+
+        const val ICON_KEY_CHILD_MAP_LAYERS = 0
+        const val ICON_KEY_CHILD_CAR_INFO = 1
+        const val ICON_KEY_CHILD_CAR_INFO_SPEED = 2
+        const val ICON_KEY_CHILD_RELOAD = 3
+        const val ICON_KEY_CHILD_CENTER = 4
+        const val ICON_KEY_CHILD_ROUTE = 5
+    }
+
+    private var isExpanded = false
+    private val groupData = listOf("Parent")
     private val childData =
-        listOf("Filho 1", "Filho 2", "Filho 3", "Filho 4", "Filho 5", "Filho 6", "Filho 7")
+        listOf("Child 1", "Child 2", "Child 3", "Child 4", "Child 5", "Child 6")
 
     override fun getGroup(groupPosition: Int): Any {
         return groupData[groupPosition]
@@ -42,13 +54,7 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         }
 
         val iconImageView = view?.findViewById<ImageView>(R.id.listGroup)
-        val iconResId = when (groupIconKey) {
-            ICON_KEY_PARENT_1 -> R.drawable.ic_button_settings
-            ICON_KEY_PARENT_2 -> R.drawable.ic_button_settings
-            ICON_KEY_PARENT_3 -> R.drawable.ic_button_settings
-            else -> R.drawable.ic_button_close
-        }
-
+        val iconResId = if (isExpanded) R.drawable.ic_button_close else R.drawable.ic_button_settings
         iconImageView?.setImageResource(iconResId)
         return view!!
     }
@@ -80,15 +86,14 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         }
 
         val iconImageView = view?.findViewById<ImageView>(R.id.listItem)
-        val iconResId = when (groupIconKey) {
-            ICON_KEY_PARENT_1 -> R.drawable.ic_button_close
-            ICON_KEY_PARENT_2 -> R.drawable.ic_button_close
-            ICON_KEY_PARENT_3 -> R.drawable.ic_button_close
-            ICON_KEY_PARENT_4 -> R.drawable.ic_button_close
-            ICON_KEY_PARENT_5 -> R.drawable.ic_button_close
-            ICON_KEY_PARENT_6 -> R.drawable.ic_button_close
-            ICON_KEY_PARENT_7 -> R.drawable.ic_button_close
-            else -> R.drawable.ic_button_close
+        val iconResId = when (childPosition) {
+            ICON_KEY_CHILD_MAP_LAYERS -> R.drawable.ic_button_layers_map
+            ICON_KEY_CHILD_CAR_INFO -> R.drawable.ic_button_car_info
+            ICON_KEY_CHILD_CAR_INFO_SPEED -> R.drawable.ic_button_info_speed_ignition
+            ICON_KEY_CHILD_RELOAD -> R.drawable.ic_button_reload
+            ICON_KEY_CHILD_CENTER -> R.drawable.ic_button_map_center
+            ICON_KEY_CHILD_ROUTE -> R.drawable.ic_button_route
+            else -> 0
         }
 
         iconImageView?.setImageResource(iconResId)
@@ -103,13 +108,8 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         return groupData.size
     }
 
-    companion object {
-        const val ICON_KEY_PARENT_1 = 1 // settings (parent)
-        const val ICON_KEY_PARENT_2 = 2
-        const val ICON_KEY_PARENT_3 = 3
-        const val ICON_KEY_PARENT_4 = 4
-        const val ICON_KEY_PARENT_5 = 5
-        const val ICON_KEY_PARENT_6 = 6
-        const val ICON_KEY_PARENT_7 = 7
+    fun setGroupExpanded(isExpanded: Boolean) {
+        this.isExpanded = isExpanded
+        notifyDataSetChanged()
     }
 }

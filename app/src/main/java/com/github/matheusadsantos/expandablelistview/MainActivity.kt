@@ -13,15 +13,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        // Defina o ícone do pai aqui (1, 2 ou 3)
-        val groupIconKey = ExpandableListAdapter.ICON_KEY_PARENT_1
+        val groupIconKey = ExpandableListAdapter.ICON_KEY_PARENT_SETTING
 
         expandableListView = findViewById(R.id.expandableListViewButtons)
         adapter = ExpandableListAdapter(this, groupIconKey)
         expandableListView.setAdapter(adapter)
 
         expandableListView.setOnGroupExpandListener { groupPosition ->
-            // Aqui você pode mudar a imagem do ícone do pai expandindo com base no groupPosition
+            adapter.setGroupExpanded(true) // Altera o ícone do grupo para expandido
+        }
+
+        expandableListView.setOnGroupCollapseListener { groupPosition ->
+            adapter.setGroupExpanded(false) // Altera o ícone do grupo para colapsado
         }
     }
 }
