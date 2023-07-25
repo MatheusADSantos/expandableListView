@@ -9,7 +9,7 @@
         </shape>
     </item>
     <!-- Inclui o botão com seu ícone de fundo original -->
-    <item android:drawable="@drawable/ic_button_close"
+    <item android:drawable="@drawable/ic_close"
         android:top="8dp"
         android:left="8dp"
         android:right="8dp"

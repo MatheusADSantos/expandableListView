@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import android.widget.ImageView
 import com.github.matheusadsantos.expandablelistview.databinding.ListGroupBinding
 import com.github.matheusadsantos.expandablelistview.databinding.ListItemBinding
 
@@ -18,23 +17,17 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         const val ICON_KEY_PARENT_CLOSE = 1 // close (parent)
 
         const val ICON_KEY_CHILD_MAP_LAYERS = 0
-        const val ICON_KEY_CHILD_CAR_INFO = 1
-        const val ICON_KEY_CHILD_CAR_INFO_SPEED = 2
-        const val ICON_KEY_CHILD_RELOAD = 3
-        const val ICON_KEY_CHILD_CENTER = 4
-        const val ICON_KEY_CHILD_ROUTE = 5
+        const val ICON_KEY_CHILD_TRACK_INFO = 1
+        const val ICON_KEY_CHILD_TRACK_INFO_SPEED = 2
+        const val ICON_KEY_CHILD_MAP_RELOAD = 3
+        const val ICON_KEY_CHILD_MAP_CENTER = 4
+        const val ICON_KEY_CHILD_TRACK_ROUTE = 5
     }
 
     private var isExpanded = false
     private val groupData = listOf("Parent")
     private val childData =
-        listOf("Child 1", "Child 2", "Child 3", "Child 4", "Child 5", "Child 6")
-//    private val bindingListItemBinding by lazy {
-//        ListItemBinding.inflate(LayoutInflater.from(context))
-//    }
-//    private val bindingListGroupBinding by lazy {
-//        ListGroupBinding.inflate(LayoutInflater.from(context))
-//    }
+        listOf("mapLayears", "trackInfo", "trackInfoSpeedIg", "mapReload", "mapCenter", "trackRoute")
 
     override fun getGroup(groupPosition: Int): Any {
         return groupData[groupPosition]
@@ -60,7 +53,7 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         } else {
             ListGroupBinding.bind(convertView)
         }
-        val iconResId = if (isExpanded) R.drawable.ic_button_close else R.drawable.ic_button_settings
+        val iconResId = if (isExpanded) R.drawable.ic_close else R.drawable.ic_settings
 
         binding.listGroup.setImageResource(iconResId)
         return binding.root
@@ -93,12 +86,12 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         }
 
         val iconResId = when (childPosition) {
-            ICON_KEY_CHILD_MAP_LAYERS -> R.drawable.ic_button_layers_map
-            ICON_KEY_CHILD_CAR_INFO -> R.drawable.ic_button_car_info
-            ICON_KEY_CHILD_CAR_INFO_SPEED -> R.drawable.ic_button_info_speed_ignition
-            ICON_KEY_CHILD_RELOAD -> R.drawable.ic_button_reload
-            ICON_KEY_CHILD_CENTER -> R.drawable.ic_button_map_center
-            ICON_KEY_CHILD_ROUTE -> R.drawable.ic_button_route
+            ICON_KEY_CHILD_MAP_LAYERS -> R.drawable.ic_map_layers
+            ICON_KEY_CHILD_TRACK_INFO -> R.drawable.ic_track_info
+            ICON_KEY_CHILD_TRACK_INFO_SPEED -> R.drawable.ic_track_info_speed
+            ICON_KEY_CHILD_MAP_RELOAD -> R.drawable.ic_map_reload
+            ICON_KEY_CHILD_MAP_CENTER -> R.drawable.ic_map_center
+            ICON_KEY_CHILD_TRACK_ROUTE -> R.drawable.ic_track_route
             else -> 0
         }
 
