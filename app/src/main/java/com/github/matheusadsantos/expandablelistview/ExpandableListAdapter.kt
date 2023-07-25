@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ImageView
+import com.github.matheusadsantos.expandablelistview.databinding.ListGroupBinding
+import com.github.matheusadsantos.expandablelistview.databinding.ListItemBinding
 
 class ExpandableListAdapter(private val context: Context, private val groupIconKey: Int) :
     BaseExpandableListAdapter() {
@@ -27,6 +29,12 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
     private val groupData = listOf("Parent")
     private val childData =
         listOf("Child 1", "Child 2", "Child 3", "Child 4", "Child 5", "Child 6")
+//    private val bindingListItemBinding by lazy {
+//        ListItemBinding.inflate(LayoutInflater.from(context))
+//    }
+//    private val bindingListGroupBinding by lazy {
+//        ListGroupBinding.inflate(LayoutInflater.from(context))
+//    }
 
     override fun getGroup(groupPosition: Int): Any {
         return groupData[groupPosition]
@@ -46,17 +54,16 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         convertView: View?,
         parent: ViewGroup?
     ): View {
-        var view = convertView
-        if (view == null) {
-            val inflater =
-                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = inflater.inflate(R.layout.list_group, null)
+        val binding: ListGroupBinding = if (convertView == null) {
+            val inflater = LayoutInflater.from(context)
+            ListGroupBinding.inflate(inflater, parent, false)
+        } else {
+            ListGroupBinding.bind(convertView)
         }
-
-        val iconImageView = view?.findViewById<ImageView>(R.id.listGroup)
         val iconResId = if (isExpanded) R.drawable.ic_button_close else R.drawable.ic_button_settings
-        iconImageView?.setImageResource(iconResId)
-        return view!!
+
+        binding.listGroup.setImageResource(iconResId)
+        return binding.root
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
@@ -78,14 +85,13 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         convertView: View?,
         parent: ViewGroup?
     ): View {
-        var view = convertView
-        if (view == null) {
-            val inflater =
-                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = inflater.inflate(R.layout.list_item, null)
+        val binding: ListItemBinding = if (convertView == null) {
+            val inflater = LayoutInflater.from(context)
+            ListItemBinding.inflate(inflater, parent, false)
+        } else {
+            ListItemBinding.bind(convertView)
         }
 
-        val iconImageView = view?.findViewById<ImageView>(R.id.listItem)
         val iconResId = when (childPosition) {
             ICON_KEY_CHILD_MAP_LAYERS -> R.drawable.ic_button_layers_map
             ICON_KEY_CHILD_CAR_INFO -> R.drawable.ic_button_car_info
@@ -96,8 +102,8 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
             else -> 0
         }
 
-        iconImageView?.setImageResource(iconResId)
-        return view!!
+        binding.listItem.setImageResource(iconResId)
+        return binding.root
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {
