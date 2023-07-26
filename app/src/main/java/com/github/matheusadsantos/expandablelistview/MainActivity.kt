@@ -1,6 +1,7 @@
 package com.github.matheusadsantos.expandablelistview
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import com.github.matheusadsantos.expandablelistview.databinding.MainActivityBinding
@@ -16,18 +17,32 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        expandableListView = binding.expandableListViewButtons
+        setUpAdapter()
+        setUpGroupListener()
+        setUpChildListener()
+    }
 
-        val groupIconKey = ExpandableListAdapter.ICON_KEY_PARENT_SETTING
-        adapter = ExpandableListAdapter(this, groupIconKey)
-        expandableListView.setAdapter(adapter)
+    private fun setUpChildListener() {
+        expandableListView.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            Log.e("MADS", "setUpChildListener: \nparent: $parent \nv: $v \ngroupPosition: $groupPosition \nchildPosition: $childPosition \nid: $id")
+            true
+        }
+    }
 
-        expandableListView.setOnGroupExpandListener { groupPosition ->
+    private fun setUpGroupListener() {
+        expandableListView.setOnGroupExpandListener { _ ->
             adapter.setGroupExpanded(true)
         }
-
-        expandableListView.setOnGroupCollapseListener { groupPosition ->
+        expandableListView.setOnGroupCollapseListener { _ ->
             adapter.setGroupExpanded(false)
         }
     }
+
+    private fun setUpAdapter() {
+        expandableListView = binding.expandableListViewButtons
+        val groupIconKey = ExpandableListAdapter.ICON_KEY_PARENT_SETTING
+        adapter = ExpandableListAdapter(this, groupIconKey)
+        expandableListView.setAdapter(adapter)
+    }
+
 }
