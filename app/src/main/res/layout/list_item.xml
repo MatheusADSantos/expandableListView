@@ -12,9 +12,7 @@
         android:foreground="?attr/selectableItemBackground"
         android:foregroundGravity="center"
         app:cardCornerRadius="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -25,5 +23,32 @@
             android:layout_margin="2dp"
             android:src="@drawable/ic_close" />
     </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button 1"
+        android:layout_marginRight="4dp"
+        app:layout_constraintEnd_toStartOf="@id/listItemCardview"
+        app:layout_constraintTop_toTopOf="@id/listItemCardview" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button 2"
+        android:layout_marginRight="4dp"
+        app:layout_constraintEnd_toStartOf="@id/button1"
+        app:layout_constraintTop_toTopOf="@id/listItemCardview" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button 3"
+        android:layout_marginRight="4dp"
+        app:layout_constraintEnd_toStartOf="@id/button2"
+        app:layout_constraintTop_toTopOf="@id/listItemCardview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
