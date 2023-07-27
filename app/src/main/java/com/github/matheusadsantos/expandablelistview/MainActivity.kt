@@ -24,14 +24,66 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpChildListener() {
         expandableListView.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-            Log.e("MADS", "setUpChildListener: \nparent: $parent \nv: $v \ngroupPosition: $groupPosition \nchildPosition: $childPosition \nid: $id")
+            Log.e("MADS", "setUpChildListener: $groupPosition \nchildPosition: $childPosition")
+            var buttonsName = listOf<String>()
+            var buttonsImage = listOf<Int>()
+            when (childPosition) {
+                0 -> {
+                    buttonsName = listOf("Padrão", "Satélite", "Trânsito")
+                    buttonsImage = listOf(
+                        R.drawable.ic_map_layer_default,
+                        R.drawable.ic_map_layer_satellite,
+                        R.drawable.ic_map_layer_traffic
+                    )
+                }
+
+                1 -> {
+                    buttonsName = listOf("Placa", "Descrição")
+                    buttonsImage = listOf(
+                        R.drawable.ic_track_info_plate,
+                        R.drawable.ic_track_info_description
+                    )
+                }
+
+                2 -> {
+                    buttonsName = listOf("Velocidade", "Ignição")
+                    buttonsImage = listOf(
+                        R.drawable.ic_track_info_speed,
+                        R.drawable.ic_track_info_ignition
+                    )
+                }
+            }
+            setUpButtonsFromChild(childPosition, groupPosition, buttonsName, buttonsImage)
             true
         }
     }
 
+    private fun setUpButtonsFromChild(
+        childPosition: Int,
+        groupPosition: Int,
+        buttonsName: List<String>,
+        buttonsImage: List<Int>
+    ) {
+        adapter.childData.forEachIndexed { index, _ ->
+            if (index != childPosition) {
+                adapter.setChildButtons(groupPosition, index, emptyList(), emptyList())
+            }
+        }
+        adapter.setChildButtons(groupPosition, childPosition, buttonsName, buttonsImage)
+
+        for (i in 0 until adapter.groupCount) {
+            if (i != groupPosition) {
+                adapter.setChildButtons(i, 0, emptyList(), emptyList())
+            }
+        }
+    }
+
     private fun setUpGroupListener() {
-        expandableListView.setOnGroupExpandListener { _ ->
+        expandableListView.setOnGroupExpandListener { groupPosition ->
             adapter.setGroupExpanded(true)
+            adapter.childData.forEachIndexed { index, _ ->
+                adapter.setChildButtons(groupPosition, index, emptyList(), emptyList())
+            }
         }
         expandableListView.setOnGroupCollapseListener { _ ->
             adapter.setGroupExpanded(false)
