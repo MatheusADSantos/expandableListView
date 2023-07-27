@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import com.github.matheusadsantos.expandablelistview.ChildButtonInfo.ChildButtonsInfo
+import com.github.matheusadsantos.expandablelistview.ChildButtonInfo.ChildButtonInfo
 import com.github.matheusadsantos.expandablelistview.databinding.ListGroupBinding
 import com.github.matheusadsantos.expandablelistview.databinding.ListItemBinding
 import kotlinx.coroutines.CoroutineScope
@@ -41,15 +41,46 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
     )
 
     // Create a map to name/image buttons
-    private val childButtonsMap = mutableMapOf<Int, ChildButtonsInfo>()
+    private val childButtonsMap = mutableMapOf<Int, ChildButtonInfo>()
 
-    fun setChildButtons(
+    fun getChildButtonInfo(childPosition: Int): ChildButtonInfo {
+        return when (childPosition) {
+            ICON_KEY_CHILD_MAP_LAYERS -> ChildButtonInfo(
+                listOf("Padrão", "Satélite", "Trânsito"),
+                listOf(
+                    R.drawable.ic_map_layer_default,
+                    R.drawable.ic_map_layer_satellite,
+                    R.drawable.ic_map_layer_traffic
+                )
+            )
+
+            ICON_KEY_CHILD_TRACK_INFO -> ChildButtonInfo(
+                listOf("Placa", "Descrição"),
+                listOf(
+                    R.drawable.ic_track_info_plate,
+                    R.drawable.ic_track_info_description
+                )
+            )
+
+            ICON_KEY_CHILD_TRACK_INFO_SPEED -> ChildButtonInfo(
+                listOf("Velocidade", "Ignição"),
+                listOf(
+                    R.drawable.ic_track_info_speed,
+                    R.drawable.ic_track_info_ignition
+                )
+            )
+
+            else -> ChildButtonInfo(emptyList(), emptyList())
+        }
+    }
+
+    fun setUpInfoChildrenButtons(
         groupPosition: Int,
         childPosition: Int,
         buttonsName: List<String>,
         buttonsImage: List<Int>
     ) {
-        childButtonsMap[childPosition] = ChildButtonsInfo(buttonsName, buttonsImage)
+        childButtonsMap[childPosition] = ChildButtonInfo(buttonsName, buttonsImage)
         notifyDataSetChanged()
     }
 
@@ -122,50 +153,34 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
 
         CoroutineScope(Dispatchers.Main).launch {
             val childButtonsInfo = childButtonsMap[childPosition]
-            childButtonsInfo?.let {
-                when (it.buttonName.size) {
-                    0 -> {
-                        setUpInfoButtons(binding, it, listOf(View.GONE, View.GONE, View.GONE))
-                    }
-
-                    2 -> {
-                        setUpInfoButtons(binding, it, listOf(View.VISIBLE, View.VISIBLE, View.GONE))
-                    }
-
-                    3 -> {
-                        setUpInfoButtons(
-                            binding,
-                            it,
-                            listOf(View.VISIBLE, View.VISIBLE, View.VISIBLE)
-                        )
-                    }
-                }
-            }
+            childButtonsInfo?.let { setUpInfoButtons(binding, it) }
         }
+
         return binding.root
     }
 
     private fun setUpInfoButtons(
         binding: ListItemBinding,
-        it: ChildButtonsInfo,
-        visibility: List<Int>
+        childButtonInfo: ChildButtonInfo
     ) {
-        Log.i("MADS", "setUpInfoButtons: $it")
-        binding.button1CardView.visibility = visibility[0]
-        binding.button2CardView.visibility = visibility[1]
-        binding.button3CardView.visibility = visibility[2]
+        Log.i("MADS", "setUpInfoButtons: $childButtonInfo")
+        binding.button1CardView.visibility =
+            if (childButtonInfo.names.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.button2CardView.visibility =
+            if (childButtonInfo.names.size >= 2) View.VISIBLE else View.GONE
+        binding.button3CardView.visibility =
+            if (childButtonInfo.names.size >= 3) View.VISIBLE else View.GONE
 
         binding.button1TextView.text =
-            if (visibility[0] == View.VISIBLE) it.buttonName[0] else return
+            if (childButtonInfo.names.isNotEmpty()) childButtonInfo.names[0] else return
         binding.button2TextView.text =
-            if (visibility[1] == View.VISIBLE) it.buttonName[1] else return
+            if (childButtonInfo.names.size >= 2) childButtonInfo.names[1] else return
         binding.button3TextView.text =
-            if (visibility[2] == View.VISIBLE) it.buttonName[2] else return
+            if (childButtonInfo.names.size >= 3) childButtonInfo.names[2] else return
 
-
-        binding.button1ImageView.setImageResource(it.buttonImage[0])
-        binding.button2ImageView.setBackgroundResource(it.buttonImage[1])
-        binding.button3ImageView.setBackgroundResource(it.buttonImage[2])
+        binding.button1ImageView.setImageResource(childButtonInfo.images[0])
+        binding.button2ImageView.setImageResource(childButtonInfo.images[1])
+        binding.button3ImageView.setImageResource(childButtonInfo.images[2])
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
+import com.github.matheusadsantos.expandablelistview.ChildButtonInfo.ChildButtonInfo
 import com.github.matheusadsantos.expandablelistview.databinding.MainActivityBinding
 
 class MainActivity : AppCompatActivity() {
@@ -22,67 +23,23 @@ class MainActivity : AppCompatActivity() {
         setUpChildListener()
     }
 
-    private fun setUpChildListener() {
-        expandableListView.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-            Log.e("MADS", "setUpChildListener: $groupPosition \nchildPosition: $childPosition")
-            var buttonsName = listOf<String>()
-            var buttonsImage = listOf<Int>()
-            when (childPosition) {
-                0 -> {
-                    buttonsName = listOf("Padrão", "Satélite", "Trânsito")
-                    buttonsImage = listOf(
-                        R.drawable.ic_map_layer_default,
-                        R.drawable.ic_map_layer_satellite,
-                        R.drawable.ic_map_layer_traffic
-                    )
-                }
-
-                1 -> {
-                    buttonsName = listOf("Placa", "Descrição")
-                    buttonsImage = listOf(
-                        R.drawable.ic_track_info_plate,
-                        R.drawable.ic_track_info_description
-                    )
-                }
-
-                2 -> {
-                    buttonsName = listOf("Velocidade", "Ignição")
-                    buttonsImage = listOf(
-                        R.drawable.ic_track_info_speed,
-                        R.drawable.ic_track_info_ignition
-                    )
-                }
-            }
-            setUpButtonsFromChild(childPosition, groupPosition, buttonsName, buttonsImage)
-            true
-        }
+    private fun setUpAdapter() {
+        expandableListView = binding.expandableListViewButtons
+        val groupIconKey = ExpandableListAdapter.ICON_KEY_PARENT_SETTING
+        adapter = ExpandableListAdapter(this, groupIconKey)
+        expandableListView.setAdapter(adapter)
     }
 
-    private fun setUpButtonsFromChild(
-        childPosition: Int,
-        groupPosition: Int,
-        buttonsName: List<String>,
-        buttonsImage: List<Int>
-    ) {
-        adapter.childData.forEachIndexed { index, _ ->
-            if (index != childPosition) {
-                adapter.setChildButtons(groupPosition, index, emptyList(), emptyList())
-            }
-        }
-        adapter.setChildButtons(groupPosition, childPosition, buttonsName, buttonsImage)
-
-        for (i in 0 until adapter.groupCount) {
-            if (i != groupPosition) {
-                adapter.setChildButtons(i, 0, emptyList(), emptyList())
-            }
-        }
-    }
 
     private fun setUpGroupListener() {
         expandableListView.setOnGroupExpandListener { groupPosition ->
             adapter.setGroupExpanded(true)
             adapter.childData.forEachIndexed { index, _ ->
-                adapter.setChildButtons(groupPosition, index, emptyList(), emptyList())
+                setUpInfoChildrenButtons(
+                    index, groupPosition, childButtonInfo = ChildButtonInfo(
+                        listOf(), listOf()
+                    )
+                )
             }
         }
         expandableListView.setOnGroupCollapseListener { _ ->
@@ -90,11 +47,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpAdapter() {
-        expandableListView = binding.expandableListViewButtons
-        val groupIconKey = ExpandableListAdapter.ICON_KEY_PARENT_SETTING
-        adapter = ExpandableListAdapter(this, groupIconKey)
-        expandableListView.setAdapter(adapter)
+    private fun setUpChildListener() {
+        expandableListView.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            Log.e("MADS", "setUpChildListener: $groupPosition \nchildPosition: $childPosition")
+            var childButtonInfo = adapter.getChildButtonInfo(childPosition)
+            setUpInfoChildrenButtons(childPosition, groupPosition, childButtonInfo)
+            true
+        }
+    }
+
+    private fun setUpInfoChildrenButtons(
+        childPosition: Int,
+        groupPosition: Int,
+        childButtonInfo: ChildButtonInfo
+    ) {
+        adapter.childData.forEachIndexed { index, _ ->
+            if (index != childPosition) {
+                adapter.setUpInfoChildrenButtons(groupPosition, index, emptyList(), emptyList())
+            } else {
+                adapter.setUpInfoChildrenButtons(
+                    groupPosition,
+                    childPosition,
+                    childButtonInfo.names,
+                    childButtonInfo.images
+                )
+            }
+        }
     }
 
 }
