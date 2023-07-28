@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import androidx.core.content.ContextCompat
 import com.github.matheusadsantos.expandablelistview.ChildButtonInfo.ChildButtonInfo
 import com.github.matheusadsantos.expandablelistview.databinding.ListGroupBinding
 import com.github.matheusadsantos.expandablelistview.databinding.ListItemBinding
@@ -164,23 +165,26 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         childButtonInfo: ChildButtonInfo
     ) {
         Log.i("MADS", "setUpInfoButtons: $childButtonInfo")
-        binding.button1CardView.visibility =
+        binding.button0.visibility =
             if (childButtonInfo.names.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.button2CardView.visibility =
+        binding.button1.visibility =
             if (childButtonInfo.names.size >= 2) View.VISIBLE else View.GONE
-        binding.button3CardView.visibility =
+        binding.button2.visibility =
             if (childButtonInfo.names.size >= 3) View.VISIBLE else View.GONE
 
-        binding.button1TextView.text =
+        binding.button0.text =
             if (childButtonInfo.names.isNotEmpty()) childButtonInfo.names[0] else return
-        binding.button2TextView.text =
+        binding.button1.text =
             if (childButtonInfo.names.size >= 2) childButtonInfo.names[1] else return
-        binding.button3TextView.text =
+        binding.button2.text =
             if (childButtonInfo.names.size >= 3) childButtonInfo.names[2] else return
 
-        binding.button1ImageView.setImageResource(childButtonInfo.images[0])
-        binding.button2ImageView.setImageResource(childButtonInfo.images[1])
-        binding.button3ImageView.setImageResource(childButtonInfo.images[2])
+        val drawable0 = ContextCompat.getDrawable(context, childButtonInfo.images[0])
+        binding.button0.setCompoundDrawablesWithIntrinsicBounds(drawable0, null, null, null)
+        val drawable1 = ContextCompat.getDrawable(context, childButtonInfo.images[1])
+        binding.button1.setCompoundDrawablesWithIntrinsicBounds(drawable1, null, null, null)
+        val drawable2 = ContextCompat.getDrawable(context, childButtonInfo.images[2])
+        binding.button2.setCompoundDrawablesWithIntrinsicBounds(drawable2, null, null, null)
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {

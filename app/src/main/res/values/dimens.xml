@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="radiusSkeleton">4dp</dimen>
+    <dimen name="editTextHeight">48dp</dimen>
+    <dimen name="searchBarHeight">48dp</dimen>
+    <dimen name="heightToolbar">56dp</dimen>
+    <dimen name="heightSlideToAction">60dp</dimen>
+    <dimen name="thumbOffsetSlideToAction">-6dp</dimen>
+    <dimen name="floatToolbarHeight">48dp</dimen>
+    <dimen name="buttonHeight">48dp</dimen>
+    <dimen name="textSize">15dp</dimen>
+    <dimen name="textSizeToolbar">21dp</dimen>
+    <dimen name="radiusImageMarker">20dp</dimen>
+    <dimen name="paddingMapVertical">30dp</dimen>
+    <dimen name="paddingMapHorizontal">15dp</dimen>
+    <dimen name="heightMarker">50dp</dimen>
+    <dimen name="widthPolylineRouteEvents">4dp</dimen>
+    <dimen name="anchorNegativeMarkerTracked">5dp</dimen>
+    <dimen name="anchorPlusMarkerDetail">20dp</dimen>
+    <dimen name="anchorNegativePointReferenceDetail">4dp</dimen>
+    <dimen name="anchorNegativeMarkerTrackedWithFence">50dp</dimen>
+    <dimen name="anchorNegativePointReferenceHorizontal">12dp</dimen>
+    <dimen name="anchorNegativePointReferenceVertical">6dp</dimen>
+    <dimen name="widthClusterImagePointReference">20dp</dimen>
+    <dimen name="heightClusterImagePointReference">24dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="heightSnackBar">30dp</dimen>
+    <dimen name="heightLayoutSelectorImage">160dp</dimen>
+    <dimen name="startFirstTimelineItem">20dp</dimen>
+    <dimen name="startMiddleTimelineItem">-6dp</dimen>
+    <dimen name="heightTimelineLayout">112dp</dimen>
+    <dimen name="heightReduceTimelineLayout">72dp</dimen>
+    <dimen name="offsetThumbSeekBar">0dp</dimen>
+    <dimen name="heightTopSnackBar">100dp</dimen>
+    <dimen name="paddingImageMarker">7dp</dimen>
+</resources>

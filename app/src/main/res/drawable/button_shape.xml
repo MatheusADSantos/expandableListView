@@ -1,0 +1,20 @@
+<!-- button_shape.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background shape -->
+    <item android:left="4px" android:right="4px" android:top="4px" android:bottom="4px">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="6px" />
+        </shape>
+    </item>
+
+    <!-- Drop shadow -->
+    <item android:left="0px" android:right="0px" android:top="5px" android:bottom="0px">
+        <shape android:shape="rectangle">
+            <solid android:color="#222B45" />
+            <corners android:radius="6px" />
+        </shape>
+    </item>
+
+</layer-list>

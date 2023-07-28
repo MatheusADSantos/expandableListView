@@ -51,14 +51,14 @@ class MainActivity : AppCompatActivity() {
         expandableListView.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
             Log.e("MADS", "setUpChildListener: $groupPosition \nchildPosition: $childPosition")
             var childButtonInfo = adapter.getChildButtonInfo(childPosition)
-            setUpInfoChildrenButtons(childPosition, groupPosition, childButtonInfo)
+            setUpInfoChildrenButtons(groupPosition, childPosition, childButtonInfo)
             true
         }
     }
 
     private fun setUpInfoChildrenButtons(
-        childPosition: Int,
         groupPosition: Int,
+        childPosition: Int,
         childButtonInfo: ChildButtonInfo
     ) {
         adapter.childData.forEachIndexed { index, _ ->
