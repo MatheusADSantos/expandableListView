@@ -56,18 +56,20 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
             )
 
             ICON_KEY_CHILD_TRACK_INFO -> ChildButtonInfo(
-                listOf("Placa", "Descrição"),
+                listOf("Placa", "Descrição", "test..."),
                 listOf(
                     R.drawable.ic_track_info_plate,
-                    R.drawable.ic_track_info_description
+                    R.drawable.ic_track_info_description,
+                    com.google.android.material.R.drawable.test_level_drawable
                 )
             )
 
             ICON_KEY_CHILD_TRACK_INFO_SPEED -> ChildButtonInfo(
-                listOf("Velocidade", "Ignição"),
+                listOf("Velocidade", "Ignição", "test..."),
                 listOf(
                     R.drawable.ic_track_info_speed,
-                    R.drawable.ic_track_info_ignition
+                    R.drawable.ic_track_info_ignition,
+                    com.google.android.material.R.drawable.test_level_drawable
                 )
             )
 
@@ -154,7 +156,7 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
 
         CoroutineScope(Dispatchers.Main).launch {
             val childButtonsInfo = childButtonsMap[childPosition]
-            childButtonsInfo?.let { setUpInfoButtons(binding, it) }
+            childButtonsInfo?.let { setUpInfoButtons(binding, it, childPosition) }
         }
 
         return binding.root
@@ -162,7 +164,8 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
 
     private fun setUpInfoButtons(
         binding: ListItemBinding,
-        childButtonInfo: ChildButtonInfo
+        childButtonInfo: ChildButtonInfo,
+        position: Int
     ) {
         Log.i("MADS", "setUpInfoButtons: $childButtonInfo")
         binding.button0.visibility =
@@ -170,7 +173,7 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
         binding.button1.visibility =
             if (childButtonInfo.names.size >= 2) View.VISIBLE else View.GONE
         binding.button2.visibility =
-            if (childButtonInfo.names.size >= 3) View.VISIBLE else View.GONE
+            if (childButtonInfo.names.size >= 3 && position == 0) View.VISIBLE else View.GONE
 
         binding.button0.text =
             if (childButtonInfo.names.isNotEmpty()) childButtonInfo.names[0] else return
