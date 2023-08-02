@@ -1,6 +1,5 @@
 package com.github.matheusadsantos.expandablelistview
 
-// ExpandableListAdapter.kt
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,13 +14,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ExpandableListAdapter(private val context: Context, private val groupIconKey: Int) :
-    BaseExpandableListAdapter() {
+class ExpandableListAdapter(private val context: Context) : BaseExpandableListAdapter() {
 
     companion object {
-        const val ICON_KEY_PARENT_SETTING = 0 // settings (parent)
-        const val ICON_KEY_PARENT_CLOSE = 1 // close (parent)
-
         const val ICON_KEY_CHILD_MAP_LAYERS = 0
         const val ICON_KEY_CHILD_TRACK_INFO = 1
         const val ICON_KEY_CHILD_TRACK_INFO_SPEED = 2
@@ -60,7 +55,7 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
                 listOf(
                     R.drawable.ic_track_info_plate,
                     R.drawable.ic_track_info_description,
-                    com.google.android.material.R.drawable.test_level_drawable
+                    R.drawable.ic_track_info_description
                 )
             )
 
@@ -69,7 +64,7 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
                 listOf(
                     R.drawable.ic_track_info_speed,
                     R.drawable.ic_track_info_ignition,
-                    com.google.android.material.R.drawable.test_level_drawable
+                    R.drawable.ic_track_info_description
                 )
             )
 
@@ -78,7 +73,6 @@ class ExpandableListAdapter(private val context: Context, private val groupIconK
     }
 
     fun setUpInfoChildrenButtons(
-        groupPosition: Int,
         childPosition: Int,
         buttonsName: List<String>,
         buttonsImage: List<Int>
