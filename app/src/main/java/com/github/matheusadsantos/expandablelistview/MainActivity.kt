@@ -11,6 +11,7 @@ import com.github.matheusadsantos.expandablelistview.databinding.MainActivityBin
 
 class MainActivity : AppCompatActivity() {
 
+    private var isClickedButtonTrackCluster = false
     private val childButtonsMap = mutableMapOf<Int, ChildButtonInfo>()
     private var isExpandedChild = false
     private lateinit var expandableListView: ExpandableListView
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         setUpAdapter()
         setUpGroupListener()
         setUpChildListener()
+        setupButtonTrackCluster()
     }
 
     private fun setUpAdapter() {
@@ -155,4 +157,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupButtonTrackCluster() {
+        binding.buttonTrackCluster.setOnClickListener {
+            isClickedButtonTrackCluster = !isClickedButtonTrackCluster
+            val resId =
+                if (isClickedButtonTrackCluster) R.drawable.ic_track else R.drawable.ic_track_cluster
+            val drawable = ContextCompat.getDrawable(this, resId)
+            binding.buttonTrackCluster.setImageDrawable(drawable)
+        }
+    }
+    
 }
