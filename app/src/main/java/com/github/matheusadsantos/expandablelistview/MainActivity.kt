@@ -1,7 +1,6 @@
 package com.github.matheusadsantos.expandablelistview
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
@@ -40,21 +39,18 @@ class MainActivity : AppCompatActivity() {
         }
         expandableListView.setOnGroupCollapseListener { _ ->
             adapter.setGroupExpanded(false)
+            binding.flexButtons.visibility = View.GONE
         }
     }
 
     private fun setUpChildListener() {
         expandableListView.setOnChildClickListener { _, _, _, childPosition, _ ->
-            var childButtonInfo = adapter.getChildButtonInfo(childPosition)
-            setUpInfoChildrenButtons(childPosition, childButtonInfo)
-            setButtonsData(binding, childButtonInfo, childPosition)
+            val childButtonInfo = adapter.getChildButtonInfo(childPosition)
+            setupChildrenData(childPosition, childButtonInfo)
+            setupButton(binding, childButtonInfo, childPosition)
 
             isExpandedChild = !isExpandedChild
             adapter.setChildExpanded(isExpandedChild, childPosition)
-
-//            val childButtonsInfo = childButtonsMap[childPosition]
-//            childButtonsInfo?.let { setButtonsData(binding, it, childPosition) }
-
             true
         }
     }
@@ -65,10 +61,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getMarginTop(childPosition: Int): Int {
-        val childPositionFixed = (childPosition + 1)
         val heightButton = 40
         val betweenMargin = 14
-        return (childPositionFixed * heightButton) + (childPositionFixed * betweenMargin)
+        return ((childPosition + 1) * heightButton) + ((childPosition + 1) * betweenMargin)
+    }
+
+    private fun setupButton(
+        binding: MainActivityBinding,
+        childButtonData: ChildButtonInfo,
+        childPosition: Int
+    ) {
+        binding.flexButtons.visibility = View.VISIBLE
+        setupMarginTopFlexButtons(childPosition, binding)
+        setButtonsData(binding, childButtonData, childPosition)
     }
 
     private fun setButtonsData(
@@ -76,8 +81,32 @@ class MainActivity : AppCompatActivity() {
         childButtonData: ChildButtonInfo,
         childPosition: Int
     ) {
-        Log.e("MADS", "setButtonsData($childPosition): childButtonInfo: $childButtonData")
+        binding.button0.visibility =
+            if (childButtonData.names.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.button1.visibility =
+            if (childButtonData.names.size >= 2) View.VISIBLE else View.GONE
+        binding.button2.visibility =
+            if (childButtonData.names.size >= 3 && childPosition == 0) View.VISIBLE else View.GONE
 
+        binding.button0.text =
+            if (childButtonData.names.isNotEmpty()) childButtonData.names[0] else return
+        binding.button1.text =
+            if (childButtonData.names.size >= 2) childButtonData.names[1] else return
+        binding.button2.text =
+            if (childButtonData.names.size >= 3) childButtonData.names[2] else return
+
+        val drawable0 = ContextCompat.getDrawable(this, childButtonData.images[0])
+        binding.button0.setCompoundDrawablesWithIntrinsicBounds(drawable0, null, null, null)
+        val drawable1 = ContextCompat.getDrawable(this, childButtonData.images[1])
+        binding.button1.setCompoundDrawablesWithIntrinsicBounds(drawable1, null, null, null)
+        val drawable2 = ContextCompat.getDrawable(this, childButtonData.images[2])
+        binding.button2.setCompoundDrawablesWithIntrinsicBounds(drawable2, null, null, null)
+    }
+
+    private fun setupMarginTopFlexButtons(
+        childPosition: Int,
+        binding: MainActivityBinding
+    ) {
         val marginTop = when (childPosition) {
             ExpandableListAdapter.ICON_KEY_CHILD_MAP_LAYERS -> {
                 binding.flexButtons.dpToPx(getMarginTop(childPosition))
@@ -107,35 +136,12 @@ class MainActivity : AppCompatActivity() {
                 0
             }
         }
-
         val layoutParams = binding.flexButtons.layoutParams as ConstraintLayout.LayoutParams
         layoutParams.topMargin = marginTop
         binding.flexButtons.layoutParams = layoutParams
-
-
-        binding.button0.visibility =
-            if (childButtonData.names.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.button1.visibility =
-            if (childButtonData.names.size >= 2) View.VISIBLE else View.GONE
-        binding.button2.visibility =
-            if (childButtonData.names.size >= 3 && childPosition == 0) View.VISIBLE else View.GONE
-
-        binding.button0.text =
-            if (childButtonData.names.isNotEmpty()) childButtonData.names[0] else return
-        binding.button1.text =
-            if (childButtonData.names.size >= 2) childButtonData.names[1] else return
-        binding.button2.text =
-            if (childButtonData.names.size >= 3) childButtonData.names[2] else return
-
-        val drawable0 = ContextCompat.getDrawable(this, childButtonData.images[0])
-        binding.button0.setCompoundDrawablesWithIntrinsicBounds(drawable0, null, null, null)
-        val drawable1 = ContextCompat.getDrawable(this, childButtonData.images[1])
-        binding.button1.setCompoundDrawablesWithIntrinsicBounds(drawable1, null, null, null)
-        val drawable2 = ContextCompat.getDrawable(this, childButtonData.images[2])
-        binding.button2.setCompoundDrawablesWithIntrinsicBounds(drawable2, null, null, null)
     }
 
-    private fun setUpInfoChildrenButtons(
+    private fun setupChildrenData(
         childPosition: Int,
         childButtonInfo: ChildButtonInfo
     ) {
