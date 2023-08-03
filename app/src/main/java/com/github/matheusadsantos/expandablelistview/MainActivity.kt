@@ -61,11 +61,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun View.dpToPx(dp: Int): Int {
         val scale = resources.displayMetrics.density
-        return (dp * scale + 0.5f).toInt()
+        return (dp * scale).toInt()
     }
 
     private fun getMarginTop(childPosition: Int): Int {
-        return (childPosition + 1) * 50
+        val childPositionFixed = (childPosition + 1)
+        val heightButton = 40
+        val betweenMargin = 14
+        return (childPositionFixed * heightButton) + (childPositionFixed * betweenMargin)
     }
 
     private fun setButtonsData(
