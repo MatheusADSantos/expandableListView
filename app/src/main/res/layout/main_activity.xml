@@ -6,7 +6,7 @@
 
     <ExpandableListView
         android:id="@+id/expandableListViewButtons"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
@@ -15,8 +15,60 @@
         android:groupIndicator="@android:color/transparent"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:alignItems="center"
+        app:justifyContent="center"
+        app:layout_constraintEnd_toStartOf="@+id/expandableListViewButtons"
+        app:layout_constraintTop_toTopOf="@+id/expandableListViewButtons">
+
+        <Button
+            android:id="@+id/button_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:backgroundTint="@color/cardview_light_background"
+            android:drawableLeft="@drawable/ic_map_center"
+            android:text="@string/dropDownButton3"
+            android:textAllCaps="false"
+            android:textColor="@color/colorText"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:backgroundTint="@color/cardview_light_background"
+            android:drawableLeft="@drawable/ic_map_center"
+            android:text="@string/dropDownButton2"
+            android:textAllCaps="false"
+            android:textColor="@color/colorText"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/button_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:backgroundTint="@color/cardview_light_background"
+            android:drawableLeft="@drawable/ic_map_center"
+            android:text="@string/dropDownButton1"
+            android:textAllCaps="false"
+            android:textColor="@color/colorText"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+    </com.google.android.flexbox.FlexboxLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

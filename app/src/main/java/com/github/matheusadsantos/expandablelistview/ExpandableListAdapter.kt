@@ -1,12 +1,10 @@
 package com.github.matheusadsantos.expandablelistview
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import androidx.core.content.ContextCompat
 import com.github.matheusadsantos.expandablelistview.ChildButtonInfo.ChildButtonInfo
 import com.github.matheusadsantos.expandablelistview.databinding.ListGroupBinding
 import com.github.matheusadsantos.expandablelistview.databinding.ListItemBinding
@@ -34,9 +32,6 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
         "mapCenter",
         "trackRoute"
     )
-
-    // Create a map to name/image buttons
-    private val childButtonsMap = mutableMapOf<Int, ChildButtonInfo>()
 
     fun getChildButtonInfo(childPosition: Int): ChildButtonInfo {
         return when (childPosition) {
@@ -127,11 +122,7 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
         } else {
             ListItemBinding.bind(convertView)
         }
-
         setChildrenData(childPosition, binding)
-        val childButtonsInfo = childButtonsMap[childPosition]
-        childButtonsInfo?.let { setButtonData(binding, it, childPosition) }
-
         return binding.root
     }
 
@@ -157,44 +148,6 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
             else -> 0
         }
         binding.listItem.setImageResource(iconResId)
-    }
-
-    fun setChildrenData(
-        childPosition: Int,
-        buttonsName: List<String>,
-        buttonsImage: List<Int>
-    ) {
-        childButtonsMap[childPosition] = ChildButtonInfo(buttonsName, buttonsImage)
-        notifyDataSetChanged()
-    }
-
-    private fun setButtonData(
-        binding: ListItemBinding,
-        childButtonInfo: ChildButtonInfo,
-        position: Int
-    ) {
-        Log.e("MADS", "setButtonData($position): childButtonInfo: $childButtonInfo")
-
-        binding.button0.visibility =
-            if (childButtonInfo.names.isNotEmpty()) View.VISIBLE else View.GONE
-        binding.button1.visibility =
-            if (childButtonInfo.names.size >= 2) View.VISIBLE else View.GONE
-        binding.button2.visibility =
-            if (childButtonInfo.names.size >= 3 && position == 0) View.VISIBLE else View.GONE
-
-        binding.button0.text =
-            if (childButtonInfo.names.isNotEmpty()) childButtonInfo.names[0] else return
-        binding.button1.text =
-            if (childButtonInfo.names.size >= 2) childButtonInfo.names[1] else return
-        binding.button2.text =
-            if (childButtonInfo.names.size >= 3) childButtonInfo.names[2] else return
-
-        val drawable0 = ContextCompat.getDrawable(context, childButtonInfo.images[0])
-        binding.button0.setCompoundDrawablesWithIntrinsicBounds(drawable0, null, null, null)
-        val drawable1 = ContextCompat.getDrawable(context, childButtonInfo.images[1])
-        binding.button1.setCompoundDrawablesWithIntrinsicBounds(drawable1, null, null, null)
-        val drawable2 = ContextCompat.getDrawable(context, childButtonInfo.images[2])
-        binding.button2.setCompoundDrawablesWithIntrinsicBounds(drawable2, null, null, null)
     }
 
     fun setGroupExpanded(isExpandedGroup: Boolean) {
