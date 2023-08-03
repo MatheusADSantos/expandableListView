@@ -8,6 +8,7 @@ import com.github.matheusadsantos.expandablelistview.databinding.MainActivityBin
 
 class MainActivity : AppCompatActivity() {
 
+    private var isExpandedChild = false
     private lateinit var expandableListView: ExpandableListView
     private lateinit var adapter: ExpandableListAdapter
     private val binding: MainActivityBinding by lazy {
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         expandableListView.setOnChildClickListener { _, _, _, childPosition, _ ->
             var childButtonInfo = adapter.getChildButtonInfo(childPosition)
             setUpInfoChildrenButtons(childPosition, childButtonInfo)
+            isExpandedChild = !isExpandedChild
+            adapter.setChildExpanded(isExpandedChild, childPosition)
             true
         }
     }
@@ -51,13 +54,13 @@ class MainActivity : AppCompatActivity() {
     ) {
         adapter.childData.forEachIndexed { index, _ ->
             if (index != childPosition) {
-                adapter.setUpInfoChildrenButtons(
+                adapter.setChildrenData(
                     index,
                     emptyList(),
                     emptyList()
                 )
             } else {
-                adapter.setUpInfoChildrenButtons(
+                adapter.setChildrenData(
                     childPosition,
                     childButtonInfo.names,
                     childButtonInfo.images

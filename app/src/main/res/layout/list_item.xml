@@ -34,7 +34,8 @@
         app:justifyContent="center"
         app:layout_constraintBottom_toBottomOf="@+id/listItemCardview"
         app:layout_constraintEnd_toStartOf="@+id/listItemCardview"
-        app:layout_constraintTop_toTopOf="@+id/listItemCardview">
+        app:layout_constraintTop_toTopOf="@+id/listItemCardview"
+        android:visibility="visible">
 
         <Button
             android:id="@+id/button_2"
