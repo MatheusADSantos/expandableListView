@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">ExpandableList</string>
     <string name="dropDownButton3">Button 3</string>
-    <string name="dropDownButton2">Button 2\n</string>
+    <string name="dropDownButton2">Button 2</string>
     <string name="dropDownButton1">Button 1</string>
 </resources>

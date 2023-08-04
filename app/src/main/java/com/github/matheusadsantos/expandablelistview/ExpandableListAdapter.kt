@@ -1,7 +1,6 @@
 package com.github.matheusadsantos.expandablelistview
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,7 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
     }
 
     private lateinit var bindingListItem: ListItemBinding
-    private var isExpandedChild = mutableMapOf<Int, Boolean>()
+    private var isExpandedChildList = mutableMapOf<Int, Boolean>()
     private var isExpandedGroup = false
 
     private val groupData = listOf("Parent")
@@ -156,30 +155,37 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
         val tintRed = ContextCompat.getColorStateList(context, R.color.colorAccent)
         val tintBlack = ContextCompat.getColorStateList(context, R.color.colorText)
         val iconTint = when (childPosition) {
-            ICON_KEY_CHILD_MAP_LAYERS -> if (isExpandedChild[childPosition] == true) tintRed else tintBlack
-            ICON_KEY_CHILD_TRACK_INFO -> if (isExpandedChild[childPosition] == true) tintRed else tintBlack
-            ICON_KEY_CHILD_TRACK_INFO_SPEED -> if (isExpandedChild[childPosition] == true) tintRed else tintBlack
+            ICON_KEY_CHILD_MAP_LAYERS -> if (isExpandedChildList[childPosition] == true) tintRed else tintBlack
+            ICON_KEY_CHILD_TRACK_INFO -> if (isExpandedChildList[childPosition] == true) tintRed else tintBlack
+            ICON_KEY_CHILD_TRACK_INFO_SPEED -> if (isExpandedChildList[childPosition] == true) tintRed else tintBlack
             ICON_KEY_CHILD_MAP_RELOAD -> tintBlack
             ICON_KEY_CHILD_MAP_CENTER -> tintBlack
-            ICON_KEY_CHILD_TRACK_ROUTE -> if (isExpandedChild[childPosition] == true) tintRed else tintBlack
+            ICON_KEY_CHILD_TRACK_ROUTE -> if (isExpandedChildList[childPosition] == true) tintRed else tintBlack
             else -> tintBlack
         }
         binding.listItem.imageTintList = iconTint
     }
 
     fun setGroupExpanded(isExpandedGroup: Boolean) {
+        resetIsExpandedChildList()
         this.isExpandedGroup = isExpandedGroup
         notifyDataSetChanged()
     }
 
     fun setChildExpanded(isExpandedChild: Boolean, childPosition: Int) {
-        // Clearing the list to see next button selected
-        this.isExpandedChild.forEach {
-            Log.i("MADS", "setChildExpanded: $it")
-            this.isExpandedChild[it.key] = false
-        }
-        this.isExpandedChild[childPosition] = isExpandedChild
+        Log.i("MADS", "setChildExpanded($childPosition): isExpandedChild: $isExpandedChild")
+        this.isExpandedChildList[childPosition] = isExpandedChild
+        resetIsExpandedChildList(childPosition)
         notifyDataSetChanged()
+    }
+
+    private fun resetIsExpandedChildList(childPosition: Int? = null) {
+        this.isExpandedChildList.forEach {
+            Log.i("MADS", "resetIsExpandedChildList: $it")
+            childPosition?.let { position ->
+                this.isExpandedChildList[it.key] = position == it.key
+            }
+        }
     }
 
 }
