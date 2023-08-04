@@ -1,10 +1,13 @@
 package com.github.matheusadsantos.expandablelistview
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import androidx.core.content.ContextCompat
 import com.github.matheusadsantos.expandablelistview.ChildButtonInfo.ChildButtonInfo
 import com.github.matheusadsantos.expandablelistview.databinding.ListGroupBinding
 import com.github.matheusadsantos.expandablelistview.databinding.ListItemBinding
@@ -20,6 +23,7 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
         const val ICON_KEY_CHILD_TRACK_ROUTE = 5
     }
 
+    private lateinit var bindingListItem: ListItemBinding
     private var isExpandedChild = mutableMapOf<Int, Boolean>()
     private var isExpandedGroup = false
 
@@ -116,14 +120,14 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
         convertView: View?,
         parent: ViewGroup?
     ): View {
-        val binding: ListItemBinding = if (convertView == null) {
+        bindingListItem = if (convertView == null) {
             val inflater = LayoutInflater.from(context)
             ListItemBinding.inflate(inflater, parent, false)
         } else {
             ListItemBinding.bind(convertView)
         }
-        setChildrenData(childPosition, binding)
-        return binding.root
+        setChildrenData(childPosition, bindingListItem)
+        return bindingListItem.root
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {
@@ -148,6 +152,19 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
             else -> 0
         }
         binding.listItem.setImageResource(iconResId)
+
+        val tintRed = ContextCompat.getColorStateList(context, R.color.colorAccent)
+        val tintBlack = ContextCompat.getColorStateList(context, R.color.colorText)
+        val iconTint = when (childPosition) {
+            ICON_KEY_CHILD_MAP_LAYERS -> if (isExpandedChild[childPosition] == true) tintRed else tintBlack
+            ICON_KEY_CHILD_TRACK_INFO -> if (isExpandedChild[childPosition] == true) tintRed else tintBlack
+            ICON_KEY_CHILD_TRACK_INFO_SPEED -> if (isExpandedChild[childPosition] == true) tintRed else tintBlack
+            ICON_KEY_CHILD_MAP_RELOAD -> tintBlack
+            ICON_KEY_CHILD_MAP_CENTER -> tintBlack
+            ICON_KEY_CHILD_TRACK_ROUTE -> if (isExpandedChild[childPosition] == true) tintRed else tintBlack
+            else -> tintBlack
+        }
+        binding.listItem.imageTintList = iconTint
     }
 
     fun setGroupExpanded(isExpandedGroup: Boolean) {
@@ -156,6 +173,11 @@ class ExpandableListAdapter(private val context: Context) : BaseExpandableListAd
     }
 
     fun setChildExpanded(isExpandedChild: Boolean, childPosition: Int) {
+        // Clearing the list to see next button selected
+        this.isExpandedChild.forEach {
+            Log.i("MADS", "setChildExpanded: $it")
+            this.isExpandedChild[it.key] = false
+        }
         this.isExpandedChild[childPosition] = isExpandedChild
         notifyDataSetChanged()
     }
